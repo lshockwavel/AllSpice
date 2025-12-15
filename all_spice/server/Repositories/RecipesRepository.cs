@@ -81,6 +81,43 @@ public class RecipesRepository
         return recipes;
     }
 
+    internal List<Recipe> GetRecipesByQuery(string name, string category)
+    {
+        string sql = @"
+        SELECT 
+        recipe.*,
+        accounts.*
+        FROM recipe
+        INNER JOIN accounts ON recipe.creator_id = accounts.id
+        WHERE recipe.title LIKE @Name AND recipe.category LIKE @Category
+        ORDER BY recipe.created_at;";
+        List<Recipe> recipes = _db.Query(sql, (Recipe recipe, Account account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }, new { Name = $"%{name}%", Category = $"%{category}%" }).ToList();
+        return recipes;
+    }
+
+    //TODO: Work in progress, need to finish and test.
+    internal Recipe GetRecipeByIdWithIngredients(int recipeId)
+    {
+        string sql = @"
+        SELECT 
+        recipes_with_favorite_counts.*,
+        accounts.*
+        FROM recipes_with_favorite_counts
+        INNER JOIN accounts ON recipes_with_favorite_counts.creator_id = accounts.id
+        WHERE recipes_with_favorite_counts.id = @recipeId;";
+
+        Recipe recipe = _db.Query(sql, (Recipe recipe, Account account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }, new { recipeId }).FirstOrDefault();
+        return recipe;
+    }
+
     internal Recipe GetRecipeById(int recipeId)
     {
         string sql = @"

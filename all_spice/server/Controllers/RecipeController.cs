@@ -7,7 +7,7 @@ public class RecipesController : ControllerBase
     private readonly Auth0Provider _auth0Provider;
     private readonly RecipesService _recipeService;
     private readonly IngredientsService _ingredientsService;
-    
+
     public RecipesController(Auth0Provider auth0Provider, RecipesService service, IngredientsService ingredientsService)
     {
         _auth0Provider = auth0Provider;
@@ -39,11 +39,20 @@ public class RecipesController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> GetAllRecipes()
+    public ActionResult<List<Recipe>> GetAllRecipes([FromQuery] string name, [FromQuery] string category)
     {
         try
         {
-            List<Recipe> recipes = _recipeService.GetAllRecipes();
+            List<Recipe> recipes;
+            //Maybe add the the get all here with the if else statement?
+            if (name == null && category == null)
+            {
+                recipes = _recipeService.GetAllRecipes();
+            }
+            else
+            {
+                recipes = _recipeService.GetRecipes(name, category);
+            }
             return Ok(recipes);
         }
         catch (Exception exception)
@@ -51,6 +60,20 @@ public class RecipesController : ControllerBase
             return BadRequest(exception.Message);
         }
     }
+
+    // [HttpGet]
+    // public ActionResult<List<Recipe>> GetAllRecipes()
+    // {
+    //     try
+    //     {
+    //         List<Recipe> recipes = _recipeService.GetAllRecipes();
+    //         return Ok(recipes);
+    //     }
+    //     catch (Exception exception)
+    //     {
+    //         return BadRequest(exception.Message);
+    //     }
+    // }
 
     [HttpGet("{recipeId}")]
     public ActionResult<Recipe> GetRecipeById(int recipeId)

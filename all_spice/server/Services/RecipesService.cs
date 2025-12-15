@@ -53,9 +53,21 @@ public class RecipesService
         return recipes;
     }
 
+    // internal Recipe GetRecipeById(int recipeId)
+    // {
+    //     Recipe recipe = _repo.GetRecipeById(recipeId);
+
+    //     if (recipe == null)
+    //     {
+    //         throw new Exception("Invalid Recipe Id");
+    //     }
+
+    //     return recipe;
+    // }
+
     internal Recipe GetRecipeById(int recipeId)
     {
-        Recipe recipe = _repo.GetRecipeById(recipeId);
+        Recipe recipe = _repo.GetRecipeByIdWithIngredients(recipeId);
 
         if (recipe == null)
         {
@@ -63,5 +75,11 @@ public class RecipesService
         }
 
         return recipe;
+    }
+
+    internal List<Recipe> GetRecipes(string name, string category)
+    {
+        List<Recipe> recipes = _repo.GetRecipesByQuery(name, category);
+        return recipes;
     }
 }

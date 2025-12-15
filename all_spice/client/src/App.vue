@@ -6,13 +6,13 @@ import { RouterView } from 'vue-router';
 
 <template>
   <header>
-    <Navbar />
+    <Navbar /> <!-- REVIEW: How can I make it show for some pages not for others? -->
   </header>
   <main>
     <RouterView/>
   </main>
   <footer class=" text-center">
-    Made with <i class="mdi mdi-heart text-pink"></i> by CodeWorks
+    Crunched out by <i class="mdi mdi-account-hard-hat-outline"></i> by Shockwave
   </footer>
 </template>
 

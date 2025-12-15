@@ -24,7 +24,7 @@ public class FavoritesRepository
         SELECT favorites.*, recipe.*, accounts.*
         FROM favorites
         INNER JOIN recipe ON favorites.recipe_id = recipe.id
-        INNER JOIN accounts ON recipe.creator_id = accounts.id
+        INNER JOIN accounts ON favorites.account_id = accounts.id
         WHERE favorites.id = LAST_INSERT_ID();";
         // FavoriteRecipe favorite = _db.Query(sql, (Favorite favorite, FavoriteRecipe favoriteRecipe, Account account) =>
         // {
@@ -35,6 +35,7 @@ public class FavoritesRepository
         FavoriteRecipe newFavoriteRecipe = _db.Query(sql, (Favorite favorite, FavoriteRecipe favoriteRecipe, Account account) =>
         {
             favoriteRecipe.FavoriteId = favorite.Id;
+            favoriteRecipe.CreatorId = favorite.AccountId;
             favoriteRecipe.Creator = account;
             return favoriteRecipe;
         }, newFavorite).FirstOrDefault();
@@ -61,11 +62,12 @@ public class FavoritesRepository
         SELECT favorites.*, recipe.*, accounts.*
         FROM favorites
         INNER JOIN recipe ON favorites.recipe_id = recipe.id
-        INNER JOIN accounts ON recipe.creator_id = accounts.id
+        INNER JOIN accounts ON favorites.account_id = accounts.id
         WHERE favorites.id = @FavoriteId LIMIT 1;";
         FavoriteRecipe favorite = _db.Query(sql, (Favorite favorite, FavoriteRecipe favoriteRecipe, Account account) =>
         {
             favoriteRecipe.FavoriteId = favorite.Id;
+            favoriteRecipe.CreatorId = favorite.AccountId;
             favoriteRecipe.Creator = account;
             return favoriteRecipe;
         }, new { FavoriteId = favoriteId }).FirstOrDefault();
@@ -79,11 +81,12 @@ public class FavoritesRepository
         SELECT favorites.*, recipe.*, accounts.*
         FROM favorites
         INNER JOIN recipe ON favorites.recipe_id = recipe.id
-        INNER JOIN accounts ON recipe.creator_id = accounts.id
+        INNER JOIN accounts ON favorites.account_id = accounts.id
         WHERE favorites.account_id = @AccountId;";
         List<FavoriteRecipe> favorites = _db.Query(sql, (Favorite favorite, FavoriteRecipe favoriteRecipe, Account account) =>
         {
             favoriteRecipe.FavoriteId = favorite.Id;
+            favoriteRecipe.CreatorId = favorite.AccountId;
             favoriteRecipe.Creator = account;
             return favoriteRecipe;
         }, new { AccountId = accountId }).ToList();

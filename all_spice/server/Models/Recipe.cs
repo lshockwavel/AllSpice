@@ -11,15 +11,16 @@ namespace all_spice.Models
         public string Category { get; set; }
         public string CreatorId { get; set; }
         public Account Creator { get; set; }
+        public int FavoriteCount { get; set; } //TODO: Implement Favorite Count
     }
 
-    public class RecipeIngredient : Recipe
-    {
-        public List<Ingredient> Ingredients { get; set; }
-    }
+    // public class RecipeIngredient : Recipe
+    // {
+    //     public List<Ingredient> Ingredients { get; set; }
+    // }
 
-    public class RecipeFavorite : Recipe
-    {
-        public Favorite favoriteRecipe { get; set; }
-    }
+    // public class RecipeFavorite : Recipe
+    // {
+    //     public Favorite favoriteRecipe { get; set; }
+    // }
 }
